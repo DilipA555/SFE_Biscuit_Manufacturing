@@ -1,4 +1,5 @@
 import time
+import random
 
 class Quality:
     """
@@ -19,8 +20,20 @@ class Quality:
             print("Rejected, sent for rework.")
             self.rework()
 
-    def rework(self):
+    def rework(self, defects):
         """Perform rework for rejected batch."""
-        pass
+        print("\n Rework in progress...")
+        time.sleep(2)
+
+        # Assuming we fix 50% to 80% of defects
+        fixed_defects = int(defects * (random.uniform(0.5, 0.8)))
+        remaining_defects = defects - fixed_defects
+
+        print(f"Defects received for rework: {defects}")
+        print(f"Defects fixed: {fixed_defects}")
+        print(f"Remaining defects: {remaining_defects}")
+        print("Rework completed")
+
+        return remaining_defects
 
 
