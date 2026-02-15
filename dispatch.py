@@ -6,7 +6,7 @@ class Dispatch:
     machine assignment for biscuit production.
     """
 
-    def _init_(self,raw_material, per_biscuit, ovens):
+    def __init__(self,raw_material, per_biscuit, ovens):
         # Available raw materials in grams
         self.raw_material = raw_material
         # Required grams per biscuit
