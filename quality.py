@@ -13,7 +13,11 @@ class Quality:
     
     def check_quality(self, defect_percent, threshold=10):
         """Checks quality and approve or reject based on defect percentage."""
-        pass
+        if defect_percent <= threshold:
+            print("Approved")
+        else:
+            print("Rejected, sent for rework.")
+            self.rework()
 
     def rework(self):
         """Perform rework for rejected batch."""
