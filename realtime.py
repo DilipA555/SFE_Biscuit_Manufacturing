@@ -1,3 +1,5 @@
+import time
+import random
 class RealTime:
     """
     Handles production execution,
@@ -6,12 +8,25 @@ class RealTime:
 
     def start_production(self, job):
         """Start production for assigned job."""
-        pass
+        print("\n Production Started....")
+        time.sleep(2)
+        target = job["quantity"]
+        produced = random.randint(int(target*0.85),target)
+        return target,produced
 
     def calculate_metrics(self, target, produced):
         """Calculate downtime, utilisation and defects."""
-        pass
+        downtime = random.randint(1,5)
+        utilisation = (produced/target) * 100
+        defects = target - produced
+        return downtime, utilisation, defects
 
     def show_summary(self, target, produced, downtime, utilisation):
         """Display production summary."""
-        pass
+        print("\n Production Summary")
+        print("Target:", target)
+        print("Produced:", produced)
+        print("Downtime:", downtime, "mins")
+        print("Utilisation:", round(utilisation, 2), "%")
+        print("Realtime tracking completed ")
+        print("Production completed ")
