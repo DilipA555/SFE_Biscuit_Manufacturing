@@ -6,22 +6,53 @@ class Dispatch:
     machine assignment for biscuit production.
     """
 
-    def _init_(self):
+    def _init_(self,raw_material, per_biscuit, ovens):
         # Available raw materials in grams
-        pass
+        self.raw_material = raw_material
+        # Required grams per biscuit
+        self.per_biscuit = per_biscuit
+        # Oven status
+        self.ovens = ovens
+        self.queue = []
+        self.job_id = 1
 
     def check_raw_material(self, qty):
         """Check whether enough raw materials exist for given quantity."""
-        pass
+        print("\nChecking raw materials...")
+        time.sleep(1)
+
+        for item in self.per_biscuit:
+            required = self.per_biscuit[item] * qty
+            if self.raw_material[item] < required:
+                print(f"Not enough {item}")
+                return False
+
+        print("Raw materials sufficient")
+        return True
 
     def consume_raw_material(self, qty):
         """Reduce raw material after job creation."""
-        pass
+        for item in self.per_biscuit:
+            self.raw_material[item] -= self.per_biscuit[item] * qty
 
     def create_job(self, qty):
         """Create a production job."""
-        pass
+        job = {"job_id": self.job_id, "quantity": qty}
+        self.queue.append(job)
+        self.job_id += 1
+        print(f"Job created → {job}")
+        return job
+
 
     def assign_machine(self):
         """Assign free oven to next job in queue."""
-        pass
+        for oven in self.ovens:
+            if self.ovens[oven] == "free" and self.queue:
+                job = self.queue.pop(0)
+                self.ovens[oven] = "busy"
+                print(f"Job {job['job_id']} assigned to Oven {oven}")
+                print("Dispatch completed ")
+                return oven, job
+
+        print("All machines busy")
+        return None, None
