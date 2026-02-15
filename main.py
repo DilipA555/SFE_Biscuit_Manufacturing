@@ -3,7 +3,7 @@ from realtime import RealTime
 from quality import Quality
 import time
 
-# ---------- RAW MATERIAL STOCK ----------
+# ---------- Raw Material Stock ----------
 raw_material = {
     "flour": 20000,
     "sugar": 8000,
@@ -14,7 +14,7 @@ raw_material = {
     "essence": 1000
 }
 
-# ---------- PER BISCUIT REQUIREMENT ----------
+# ---------- Per Biscuit Requirement ----------
 per_biscuit = {
     "flour": 6,
     "sugar": 2.5,
@@ -25,7 +25,7 @@ per_biscuit = {
     "essence": 0.4
 }
 
-# ---------- MACHINES ----------
+# ---------- Machines ----------
 ovens = {
     "Oven_1": "free",
     "Oven_2": "free",
@@ -37,7 +37,6 @@ realtime = RealTime()
 quality = Quality()
 
 production_queue = []
-waiting_queue = []
 completed_queue = []
 
 while True:
@@ -56,24 +55,24 @@ while True:
     if choice == "1":
 
         qty = int(input("Enter biscuit quantity: "))
-
         print("\nChecking raw materials...")
-        time.sleep(2)
+        time.sleep(5)
 
         if dispatch.check_raw_material(qty):
-
             dispatch.consume_raw_material(qty)
-
+            print("\nCreating job...")
+            time.sleep(5)
             job = dispatch.create_job(qty)
+            time.sleep(3)
 
+            print("\nAssigning to machine...")
+            time.sleep(5)
             oven, assigned_job = dispatch.assign_machine()
-
             if assigned_job:
                 production_queue.append((oven, assigned_job))
                 print("Job moved to production queue")
             else:
-                waiting_queue.append(job)
-                print("Job added to waiting queue")
+                print("All machines are busy -> Job waiting inside dispatch queue")
 
         else:
             print("Insufficient raw materials")
@@ -84,49 +83,41 @@ while True:
     elif choice == "2":
 
         if production_queue:
-
             oven, job = production_queue.pop(0)
-
             print(f"\nStarting production for Job {job['job_id']} in {oven}")
-            time.sleep(2)
-
+            time.sleep(5)
             target, produced = realtime.start_production(job)
-
-            downtime, utilisation, defects = realtime.calculate_metrics(
-                target, produced
-            )
-
+            print("\nProduction in progress...")
+            time.sleep(10)
+            print("\nProduction is completed, evaluate the metrics.")
+            time.sleep(3)
+            print("\nEvaluating the metrics...")
+            time.sleep(5)
+            downtime, utilisation, defects = realtime.calculate_metrics(target, produced)
+            print("\nFetching production summary...")
+            time.sleep(5)
             realtime.show_summary(target, produced, downtime, utilisation)
-
             completed_queue.append((job, produced, defects))
-
             dispatch.ovens[oven] = "free"
-            print(f"{oven} is now FREE")
+            time.sleep(3)
+            print(f"\n{oven} is now FREE")
+            time.sleep(3)
 
-# 🔁 AUTO ASSIGN FROM WAITING
-            if waiting_queue:
+            # AUTO ASSIGN NEXT JOB FROM DISPATCH INTERNAL QUEUE
+            next_oven, next_job = dispatch.assign_machine()
+            time.sleep(3)
 
-                for free_oven, status in dispatch.ovens.items():
+            if next_job:
+                production_queue.append((next_oven, next_job))
 
-                    if status == "free":
-
-                        next_job = waiting_queue.pop(0)
-
-                        dispatch.ovens[free_oven] = "busy"
-
-                        production_queue.append((free_oven, next_job))
-
-                        print(f"Waiting Job {next_job['job_id']} now assigned to {free_oven}")
-                        break
-
-# SHOW REMAINING
+            # SHOW REMAINING
             if production_queue:
                 print("\nJobs waiting for production:")
                 for oven, j in production_queue:
                     print(f"Job {j['job_id']}")
 
         else:
-            print("First create & assign job")
+            print("\nFirst create & assign job")
 
 # ======================================================
 # QUALITY CHECK
@@ -137,27 +128,30 @@ while True:
 
             job, produced, defects = completed_queue.pop(0)
 
-            print(f"\nQuality checking for Job {job['job_id']}")
-            time.sleep(2)
-
-            print("\nBatch Summary:")
+            print("\n------Batch Summary------")
+            print("Job id", job["job_id"])
             print("Target:", job["quantity"])
             print("Produced:", produced)
             print("Defects:", defects)
+            time.sleep(5)
+
+            print(f"\nQuality checking for Job {job['job_id']} in progress...")
+            time.sleep(5)
 
             produced, defects = quality.check_quality(produced, defects)
 
             if completed_queue:
-                print("\n⏳ Batches waiting for quality check:")
+                time.sleep(3)
+                print("\nBatches waiting for quality check:")
                 for j, _, _ in completed_queue:
                     print(f"Job {j['job_id']}")
 
         else:
-            print("No completed production for quality check")
+            print("\nProduction not completed yet for quality check")
 
 # ======================================================
     elif choice == "4":
-        print("Exiting system...")
+        print("\nExited from the system")
         break
 
     else:

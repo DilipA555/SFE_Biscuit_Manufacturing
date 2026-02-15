@@ -1,4 +1,3 @@
-import time
 import random
 class RealTime:
     """
@@ -8,14 +7,14 @@ class RealTime:
 
     def start_production(self, job):
         """Start production for assigned job."""
-        print("\n Production Started....")
-        time.sleep(2)
+
         target = job["quantity"]
         produced = random.randint(int(target*0.85),target)
         return target,produced
 
     def calculate_metrics(self, target, produced):
         """Calculate downtime, utilisation and defects."""
+
         downtime = random.randint(1,5)
         utilisation = (produced/target) * 100
         defects = target - produced
@@ -23,10 +22,11 @@ class RealTime:
 
     def show_summary(self, target, produced, downtime, utilisation):
         """Display production summary."""
-        print("\n Production Summary")
-        print("Target:", target)
+
+        print("\n------Production Summary------")
+        print("\nTarget:", target)
         print("Produced:", produced)
         print("Downtime:", downtime, "mins")
         print("Utilisation:", round(utilisation, 2), "%")
-        print("Realtime tracking completed ")
-        print("Production completed ")
+        print("\nRealtime tracking completed ")
+        

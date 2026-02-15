@@ -1,5 +1,3 @@
-import time
-
 class Dispatch:
     """
     Handles job creation, raw material validation,
@@ -18,25 +16,25 @@ class Dispatch:
 
     def check_raw_material(self, qty):
         """Check whether enough raw materials exist for given quantity."""
-        print("\nChecking raw materials...")
-        time.sleep(1)
 
         for item in self.per_biscuit:
             required = self.per_biscuit[item] * qty
             if self.raw_material[item] < required:
-                print(f"Not enough {item}")
+                print(f"\nNot enough {item}")
                 return False
 
-        print("Raw materials sufficient")
+        print("\nRaw materials sufficient")
         return True
 
     def consume_raw_material(self, qty):
         """Reduce raw material after job creation."""
+
         for item in self.per_biscuit:
             self.raw_material[item] -= self.per_biscuit[item] * qty
 
     def create_job(self, qty):
         """Create a production job."""
+
         job = {"job_id": self.job_id, "quantity": qty}
         self.queue.append(job)
         self.job_id += 1
@@ -46,13 +44,12 @@ class Dispatch:
 
     def assign_machine(self):
         """Assign free oven to next job in queue."""
+
         for oven in self.ovens:
             if self.ovens[oven] == "free" and self.queue:
                 job = self.queue.pop(0)
                 self.ovens[oven] = "busy"
-                print(f"Job {job['job_id']} assigned to Oven {oven}")
-                print("Dispatch completed ")
+                print(f"Job {job['job_id']} assigned to {oven}")
+                print("\nDispatching completed.")
                 return oven, job
-
-        print("All machines busy")
         return None, None
