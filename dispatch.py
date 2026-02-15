@@ -1,19 +1,21 @@
+import time
+
 class Dispatch:
     """
     Handles job creation, raw material validation,
-    and machine assignment.
+    machine assignment for biscuit production.
     """
 
     def _init_(self):
-        """Initialize raw materials, ovens and job queue."""
+        # Available raw materials in grams
         pass
 
     def check_raw_material(self, qty):
-        """Check whether enough raw material is available."""
+        """Check whether enough raw materials exist for given quantity."""
         pass
 
     def consume_raw_material(self, qty):
-        """Reduce raw materials after job creation."""
+        """Reduce raw material after job creation."""
         pass
 
     def create_job(self, qty):
@@ -21,5 +23,5 @@ class Dispatch:
         pass
 
     def assign_machine(self):
-        """Assign job to a free oven."""
+        """Assign free oven to next job in queue."""
         pass
