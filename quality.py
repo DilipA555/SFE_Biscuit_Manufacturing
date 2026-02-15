@@ -33,10 +33,12 @@ class Quality:
                 print("Approved after rework.")
             else:
                 print("Rejected after rework.")
+        return produced, defects
 
 
     def rework(self, produced, defects):
         """Perform rework for rejected batch."""
+
         print("\n Rework in progress...")
         time.sleep(2)
 
