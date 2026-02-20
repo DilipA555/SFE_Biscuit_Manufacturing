@@ -22,22 +22,30 @@ class Quality:
     def check_quality(self, produced: int, defects: int, threshold: int = 10) -> Tuple[int, int]:
         """Checks quality and approve or reject based on defect percentage."""
 
-        defect_percent = self.calculate_defect(produced, defects)        
-        if defect_percent <= threshold:
-            print("Approved")
-        else:
-            print("Rejected, sent for rework.")
-            time.sleep(3)
-            produced, defects = self.rework(produced, defects)
-            time.sleep(3)
-            print("\nChecking the quality again after rework...")
-            time.sleep(5)
-            defect_percent_after_rework = self.calculate_defect(produced, defects)
-            if defect_percent_after_rework <= threshold:
-                print("Approved after rework.")
+        try:
+            defect_percent = self.calculate_defect(produced, defects)        
+            if defect_percent <= threshold:
+                print("Approved")
             else:
-                print("Rejected after rework.")
-        return produced, defects
+                print("Rejected, sent for rework.")
+                time.sleep(3)
+                produced, defects = self.rework(produced, defects)
+                time.sleep(3)
+                print("\nChecking the quality again after rework...")
+                time.sleep(5)
+                defect_percent_after_rework = self.calculate_defect(produced, defects)
+                if defect_percent_after_rework <= threshold:
+                    print("Approved after rework.")
+                else:
+                    print("Rejected after rework.")
+            return produced, defects
+        
+        except Exception as e:
+            print("\nError during quality checking:", str(e))
+            return produced, defects
+        
+        finally:
+            print("\nQuality checking completed.")
 
 
     def rework(self, produced: int, defects: int) -> Tuple[int, int]:
