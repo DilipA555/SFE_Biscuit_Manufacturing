@@ -1,24 +1,25 @@
 import random
 import time
+from typing import Tuple
 
 class Quality:
     """
     Handles defect calculation, quality decision and rework.
     """
 
-    def calculate_defect(self, produced, defects):
+    def calculate_defect(self, produced: int, defects: int) -> float:
         """Calculates defect percentage."""
 
-        total = produced + defects
+        total: int = produced + defects
         if total == 0:
             print("\nNo production data to calculate defects")
-            return 0
+            return 0.0
         defect_percent = (defects / total)*100
         print(f"\nDefect % -> {round(defect_percent,2)}")
         return defect_percent
     
     
-    def check_quality(self, produced, defects, threshold=10):
+    def check_quality(self, produced: int, defects: int, threshold: int = 10) -> Tuple[int, int]:
         """Checks quality and approve or reject based on defect percentage."""
 
         defect_percent = self.calculate_defect(produced, defects)        
@@ -39,7 +40,7 @@ class Quality:
         return produced, defects
 
 
-    def rework(self, produced, defects):
+    def rework(self, produced: int, defects: int) -> Tuple[int, int]:
         """Perform rework for rejected batch."""
 
         print("\nRework in progress...")
