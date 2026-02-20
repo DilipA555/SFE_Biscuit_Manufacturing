@@ -4,7 +4,7 @@ class Dispatch:
     machine assignment for biscuit production.
     """
 
-    def __init__(self,raw_material, per_biscuit, ovens):
+    def __init__(self,raw_material: dict[str,int], per_biscuit: dict[str,int], ovens:dict[str,str])->None:
         # Available raw materials in grams
         self.raw_material = raw_material
         # Required grams per biscuit
@@ -14,7 +14,7 @@ class Dispatch:
         self.queue = []
         self.job_id = 1
 
-    def check_raw_material(self, qty):
+    def check_raw_material(self, qty:int)->None:
         """Check whether enough raw materials exist for given quantity."""
 
         for item in self.per_biscuit:
@@ -26,13 +26,13 @@ class Dispatch:
         print("\nRaw materials sufficient")
         return True
 
-    def consume_raw_material(self, qty):
+    def consume_raw_material(self, qty:int)->None:
         """Reduce raw material after job creation."""
 
         for item in self.per_biscuit:
             self.raw_material[item] -= self.per_biscuit[item] * qty
 
-    def create_job(self, qty):
+    def create_job(self, qty:int)->dict[str:int]:
         """Create a production job."""
 
         job = {"job_id": self.job_id, "quantity": qty}
@@ -42,7 +42,7 @@ class Dispatch:
         return job
 
 
-    def assign_machine(self):
+    def assign_machine(self)-> tuple[dict[str,str],dict[str,int]]|None:
         """Assign free oven to next job in queue."""
 
         for oven in self.ovens:
