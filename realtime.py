@@ -1,10 +1,11 @@
+# RealTime module branch commit (no logic changes)
 import random
 class RealTime:
     """
     Handles production execution,
     downtime tracking and utilisation.
     """
-
+    
     def start_production(self, job):
         """Start production for assigned job."""
 
